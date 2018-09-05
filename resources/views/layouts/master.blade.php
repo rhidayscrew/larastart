@@ -148,7 +148,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-        <router-view></router-view>
+
+        <router-view></router-view>   <!-- ini router nya coy unutk menghubungkan view -->
+
+        <vue-progress-bar></vue-progress-bar>
 
         <!-- /.row -->
       </div><!-- /.container-fluid -->
