@@ -7,7 +7,7 @@
                 <h3 class="card-title">Users Table</h3>
 
                 <div class="card-tools">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#addNew"> Add New <i class="fas fa-user-plus fa-fw"></i>
+                    <button class="btn btn-success" @click="newModal"> Add New <i class="fas fa-user-plus fa-fw"></i>
                     </button>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                     <td>{{user.created_at | myDate}}</td>
 
                     <td>
-                        <a href="#">Edit
+                        <a href="#" @click="editModal(user)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         |
@@ -55,7 +55,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNewLabel">Add New</h5>
+                    <h5 class="modal-title" id="addNewLabel">Add New screw</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -139,6 +139,20 @@
         },
 
         methods: {
+             editModal(user){
+                this.form.reset();
+                // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
+              ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
+                $('#addNew').modal('show');
+                this.form.fill(user);
+            },
+            newModal(){
+                this.form.reset();
+                // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
+              ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
+                $('#addNew').modal('show');
+            },
+
             deleteUser(id){
                 swal({
                     title: 'Are you sure?',
