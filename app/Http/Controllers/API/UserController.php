@@ -16,7 +16,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('api');
+     $this->middleware('auth:api'); // ini juga baru di tambhkan bareng dengan  : Consuming Your API With JavaScript
+    // $this->middleware('api');  klo pake ini bisa di akses api nya "laraveltodoapparastart.test/api/user"
     }
 
     /**
