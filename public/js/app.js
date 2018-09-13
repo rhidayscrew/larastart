@@ -71465,12 +71465,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            editmode: false,
             users: {},
             form: new Form({
+                id: '',
                 name: '',
                 email: '',
                 password: '',
@@ -71484,21 +71488,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
+        updateUser: function updateUser() {
+            var _this = this;
+
+            this.$Progress.start();
+            //console.log('editing data');
+            this.form.put('api/user/' + this.form.id).then(function () {
+                //success
+                $('#addNew').modal('hide');
+                swal('Update!', 'YInformatione has been Update.', 'success');
+                _this.$Progress.finish();
+                Fire.$emit('AfterCreate');
+            }).catch(function () {
+                _this.$Progress.fail();
+            });
+        },
         editModal: function editModal(user) {
-            this.form.reset();
-            // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
-            ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
+            this.editmode = true, this.form.reset();
             $('#addNew').modal('show');
             this.form.fill(user);
-        },
-        newModal: function newModal() {
-            this.form.reset();
             // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
             ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
+        },
+        newModal: function newModal() {
+            this.editmode = false, this.form.reset();
             $('#addNew').modal('show');
+            // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
+            ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
         },
         deleteUser: function deleteUser(id) {
-            var _this = this;
+            var _this2 = this;
 
             swal({
                 title: 'Are you sure?',
@@ -71512,7 +71531,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 if (result.value) {
                     //send request to the server
-                    _this.form.delete('api/user/' + id).then(function () {
+                    _this2.form.delete('api/user/' + id).then(function () {
 
                         swal('Deleted!', 'Your file has been deleted.', 'success');
                         Fire.$emit('AfterCreate');
@@ -71523,35 +71542,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         loadUsers: function loadUsers() {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.get("api/user").then(function (_ref) {
                 var data = _ref.data;
-                return _this2.users = data.data;
+                return _this3.users = data.data;
             });
         },
         createUser: function createUser() {
+            var _this4 = this;
+
             this.$Progress.start();
-            this.form.post('api/user');
-            Fire.$emit('AfterCreate');
-            $('#addNew').modal('hide');
-
-            toast({
-                type: 'success',
-                title: 'User Created in successfully'
-            });
-
-            this.$Progress.finish();
+            this.form.post('api/user').then(function () {
+                Fire.$emit('AfterCreate');
+                $('#addNew').modal('hide');
+                toast({
+                    type: 'success',
+                    title: 'User Created in successfully'
+                });
+                _this4.$Progress.finish();
+            }).catch(function () {});
         }
     },
 
     created: function created() {
-        var _this3 = this;
+        var _this5 = this;
 
         this.loadUsers();
         Fire.$on('AfterCreate', function () {
             //setelah di buat data nya lalu di load table data terbaru yg baru di buat
-            _this3.loadUsers();
+            _this5.loadUsers();
         });
 
         //  setInterval(() => this.loadUsers(), 3000); // ngeset data user setiap interval 3 detik di table
@@ -71667,7 +71687,43 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.editmode,
+                        expression: "!editmode"
+                      }
+                    ],
+                    staticClass: "modal-title",
+                    attrs: { id: "addNewLabel" }
+                  },
+                  [_vm._v("Add New screw")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editmode,
+                        expression: "editmode"
+                      }
+                    ],
+                    staticClass: "modal-title",
+                    attrs: { id: "addNewLabel" }
+                  },
+                  [_vm._v("Update User Info")]
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
               _vm._v(" "),
               _c(
                 "form",
@@ -71675,7 +71731,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.createUser($event)
+                      _vm.editmode ? _vm.updateUser() : _vm.createUser()
                     }
                   }
                 },
@@ -71906,7 +71962,50 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(2)
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.editmode,
+                            expression: "editmode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Update")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.editmode,
+                            expression: "!editmode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Create")]
+                    )
+                  ])
                 ]
               )
             ])
@@ -71939,45 +72038,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title", attrs: { id: "addNewLabel" } }, [
-        _vm._v("Add New screw")
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Create")]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true

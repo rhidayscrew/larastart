@@ -55,14 +55,15 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNewLabel">Add New screw</h5>
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New screw</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User Info</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                  <!-- Modal form Create data user -->
-                <form @submit.prevent="createUser">
+                <form @submit.prevent="editmode ? updateUser() : createUser()">
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -106,7 +107,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Create</button>  <!-- masukan "submit" kedalam form   -->
+                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>  <!--  masukan "submit" kedalam form   -->
+                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>  <!-- masukan "submit" kedalam form   -->
                 </div>
 
                 </form>
@@ -125,8 +127,10 @@
 
         data(){
             return{
+                editmode: false,
                 users: {},
                 form: new Form({
+                    id: '',
                     name: '',
                     email: '',
                     password: '',
@@ -139,19 +143,41 @@
         },
 
         methods: {
-             editModal(user){
+            updateUser(){
+                this.$Progress.start();
+                //console.log('editing data');
+                this.form.put('api/user/'+this.form.id)
+                .then(()=>{
+                    //success
+                      $('#addNew').modal('hide');
+                          swal(
+                                'Update!',
+                                'YInformatione has been Update.',
+                                'success'
+                                )
+                                this.$Progress.finish();
+                                Fire.$emit('AfterCreate');
+                })
+                .catch(()=>{
+                      this.$Progress.fail();
+                });
+            },
+            editModal(user){
+                this.editmode = true,
                 this.form.reset();
-                // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
-              ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
                 $('#addNew').modal('show');
                 this.form.fill(user);
-            },
-            newModal(){
-                this.form.reset();
-                // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
+                  // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
               ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
-                $('#addNew').modal('show');
             },
+              newModal(){
+                this.editmode = false,
+                this.form.reset();
+                $('#addNew').modal('show');
+                  // modal form nya kereset, skenario nya create data pertama modal hide, lalu ccreate data ke senajut nya form modal nya kereset data nya jadi gak nyangkut data sebelum nya.
+              ///  https://github.com/cretueusebiu/vform (di sinia ada reset ada clear dll)
+            },
+
 
             deleteUser(id){
                 swal({
@@ -187,16 +213,19 @@
 
             createUser(){
                 this.$Progress.start();
-                this.form.post('api/user');
-                Fire.$emit('AfterCreate');
-                $('#addNew').modal('hide')
+                this.form.post('api/user')
+                .then(()=>{
+                    Fire.$emit('AfterCreate');
+                    $('#addNew').modal('hide')
+                    toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+                })
+                .catch(()=>{
 
-                        toast({
-                            type: 'success',
-                            title: 'User Created in successfully'
-                            })
-
-                        this.$Progress.finish();
+                })
             }
         },
 
@@ -205,7 +234,7 @@
             this.loadUsers();
                 Fire.$on('AfterCreate', () => { //setelah di buat data nya lalu di load table data terbaru yg baru di buat
                 this.loadUsers();
-            })
+            });
 
           //  setInterval(() => this.loadUsers(), 3000); // ngeset data user setiap interval 3 detik di table
         }
