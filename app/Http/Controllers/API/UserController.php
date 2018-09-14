@@ -86,11 +86,19 @@ class UserController extends Controller
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
             'password' => 'Sometimes|min:5'
+
         ]);
+
+
 
         $user->update($request->all());
 
         return ['message' => 'udaptedet user infoe'];
+
+
+       // $user->update($request->all());
+       // return ['password' => Hash::make ($request['password']),
+        //];  GAgal
     }
 
     /**
