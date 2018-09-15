@@ -114,7 +114,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-12">
-                                    <button @click.prevent="updateInfo" type="submit" class="btn btn-success">Update</button>
+                                    <button @click.prevent="updateInfo" type="submit" class="btn btn-success">Update</button>   <!-- refrase page "prevent"tambahkan ini 1.1 -->
                                     </div>
                                 </div>
                                 </form>
@@ -146,12 +146,12 @@
                 })
             }
         },
-        mounted() {  //lalu bikin ini dulu 1.1
+        mounted() {  //lalu bikin ini dulu 0.1
             console.log('Component mounted.')
         },
 
         methods:{
-            updateInfo(){
+            updateInfo(){ //tambahakan ini 2.2  //tambahakan di api.php Route
                 this.form.put('api/profile')
                 .then(()=>{
                 })

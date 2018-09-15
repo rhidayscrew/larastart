@@ -59,6 +59,15 @@ class UserController extends Controller
 
     }
 
+  public function updateProfile(Request $request)  // tambahakan ini 4.4
+    {
+        $user =  auth('api')->user();
+
+        return $request->photo;
+       // return ['message' => "succeess"];
+
+    }
+
 
 
     public function profile()
