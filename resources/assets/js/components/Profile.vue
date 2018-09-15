@@ -99,7 +99,7 @@
                                 <div class="form-group">
                                     <label for="photo" class="col-sm-2 control-label">Profile Photo</label>
                                     <div class="col-sm-12">
-                                        <input type="file" @change="updateProfile" name="photo" class="form-input">
+                                        <input type="file" @change="updateProfile" name="photo" class="form-input">    <!-- yambahkan ini @changr=updateprofile 4 -->
                                     </div>
 
                                 </div>
@@ -135,7 +135,7 @@
     export default {
         data(){
             return {
-                 form: new Form({
+                 form: new Form({  //lalu bikin ini dulu 2.
                     id:'',
                     name : '',
                     email: '',
@@ -146,9 +146,10 @@
                 })
             }
         },
-        mounted() {
+        mounted() {  //lalu bikin ini dulu 1.1
             console.log('Component mounted.')
         },
+
         methods:{
             updateInfo(){
                 this.form.put('api/profile')
@@ -157,7 +158,8 @@
                 .catch(() => {
                 });
             },
-            updateProfile(e){
+            updateProfile(e){   //tambhkana ini 5
+            //unutk upload foto
                 // console.log('uploading');
                     let file = e.target.files[0];
                     // console.log(file);
@@ -170,8 +172,8 @@
                     reader.readAsDataURL(file);
             }
         },
-        created() {
-            axios.get("api/profile")
+        created() {  //pertama bikin route lalu bikin ini dulu 1.
+            axios.get("api/profile")  //axios ini untuk menyambungkan API
             .then(({ data }) => (this.form.fill(data)));
         }
     }
