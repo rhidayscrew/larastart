@@ -72751,7 +72751,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            form: new Form({
+            form: new Form({ //lalu bikin ini dulu 2.
                 id: '',
                 name: '',
                 email: '',
@@ -72763,16 +72763,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
+        //lalu bikin ini dulu 0.1
         console.log('Component mounted.');
     },
 
     methods: {
         updateInfo: function updateInfo() {
+            //tambahakan ini 2.2  //tambahakan di api.php Route
             this.form.put('api/profile').then(function () {}).catch(function () {});
         },
         updateProfile: function updateProfile(e) {
             var _this = this;
 
+            //tambhkana ini 5
+            //unutk upload foto
             // console.log('uploading');
             var file = e.target.files[0];
             // console.log(file);
@@ -72788,7 +72792,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         var _this2 = this;
 
-        axios.get("api/profile").then(function (_ref) {
+        //pertama bikin route lalu bikin ini dulu 1.
+        axios.get("api/profile") //axios ini untuk menyambungkan API
+        .then(function (_ref) {
             var data = _ref.data;
             return _this2.form.fill(data);
         });
@@ -73093,7 +73099,7 @@ var staticRenderFns = [
       _c(
         "label",
         { staticClass: "col-sm-12 control-label", attrs: { for: "passpord" } },
-        [_vm._v("Passport (leave empty if not changing)")]
+        [_vm._v("Passport (leave empty if not changing screw)")]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-12" }, [

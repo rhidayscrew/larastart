@@ -105,7 +105,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="passpord" class="col-sm-12 control-label">Passport (leave empty if not changing)</label>
+                                    <label for="passpord" class="col-sm-12 control-label">Passport (leave empty if not changing screw)</label>
 
                                     <div class="col-sm-12">
                                     <input type="passpord" class="form-control" id="passpord" placeholder="Passport">
@@ -149,7 +149,6 @@
         mounted() {  //lalu bikin ini dulu 0.1
             console.log('Component mounted.')
         },
-
         methods:{
             updateInfo(){ //tambahakan ini 2.2  //tambahakan di api.php Route
                 this.form.put('api/profile')
