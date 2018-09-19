@@ -72779,16 +72779,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //unutk upload foto
             // console.log('uploading');
             var file = e.target.files[0];
-            // console.log(file);
+            console.log(file);
             var reader = new FileReader();
             // let vm = this;
-            reader.onloadend = function (file) {
-                console.log('RESULT', reader.result);
-                _this.form.photo = reader.result;
-            };
-            reader.readAsDataURL(file);
+            if (file['size'] < 2111775) {
+                reader.onloadend = function (file) {
+                    // console.log('RESULT', reader.result)
+                    _this.form.photo = reader.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'You are uploading a large file'
+                });
+            }
         }
     },
+
     created: function created() {
         var _this2 = this;
 
