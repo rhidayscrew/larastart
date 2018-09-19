@@ -72769,11 +72769,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         updateInfo: function updateInfo() {
+            var _this = this;
+
             //tambahakan ini 2.2  //tambahakan di api.php Route
-            this.form.put('api/profile').then(function () {}).catch(function () {});
+            this.$Progress.start();
+            this.form.put('api/profile').then(function () {
+
+                _this.$Progress.finish();
+            }).catch(function () {
+
+                _this.$Progress.fail();
+            });
         },
         updateProfile: function updateProfile(e) {
-            var _this = this;
+            var _this2 = this;
 
             //tambhkana ini 5
             //unutk upload foto
@@ -72785,7 +72794,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (file['size'] < 2111775) {
                 reader.onloadend = function (file) {
                     // console.log('RESULT', reader.result)
-                    _this.form.photo = reader.result;
+                    _this2.form.photo = reader.result;
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -72799,13 +72808,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     created: function created() {
-        var _this2 = this;
+        var _this3 = this;
 
         //pertama bikin route lalu bikin ini dulu 1.
         axios.get("api/profile") //axios ini untuk menyambungkan API
         .then(function (_ref) {
             var data = _ref.data;
-            return _this2.form.fill(data);
+            return _this3.form.fill(data);
         });
     }
 });
@@ -72937,7 +72946,48 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(4),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-sm-12 control-label",
+                          attrs: { for: "passpord" }
+                        },
+                        [_vm._v("Passport (leave empty if not changing screw)")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-sm-12" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.password,
+                              expression: "form.password"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "passpord",
+                            id: "passpord",
+                            placeholder: "Passport"
+                          },
+                          domProps: { value: _vm.form.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "password",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
                       _c("div", { staticClass: "col-sm-offset-2 col-sm-12" }, [
@@ -73096,25 +73146,6 @@ var staticRenderFns = [
         _c("textarea", {
           staticClass: "form-control",
           attrs: { id: "inputExperience", placeholder: "Experience" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "label",
-        { staticClass: "col-sm-12 control-label", attrs: { for: "passpord" } },
-        [_vm._v("Passport (leave empty if not changing screw)")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "passpord", id: "passpord", placeholder: "Passport" }
         })
       ])
     ])

@@ -108,7 +108,7 @@
                                     <label for="passpord" class="col-sm-12 control-label">Passport (leave empty if not changing screw)</label>
 
                                     <div class="col-sm-12">
-                                    <input type="passpord" class="form-control" id="passpord" placeholder="Passport">
+                                    <input type="passpord" v-model="form.password" class="form-control" id="passpord" placeholder="Passport">
                                     </div>
                                 </div>
 
